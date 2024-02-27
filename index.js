@@ -9,6 +9,7 @@ const config = {
     channelSecret: process.env.CHANNEL_SECRET,
 };
 
+
 // create LINE SDK client
 const client = new line.messagingApi.MessagingApiClient({
     channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN
@@ -18,9 +19,15 @@ const client = new line.messagingApi.MessagingApiClient({
 // about Express itself: https://expressjs.com/
 const app = express();
 
+app.get('/', (req, res) => {
+    res.sendStatus(200);
+});
+
 // register a webhook handler with middleware
 // about the middleware, please refer to doc
 app.post('/callback', line.middleware(config), (req, res) => {
+    console.log(`A post request has arrived endpoint /callback`);
+    console.log(`req.body: ${req.body}`);
     Promise
         .all(req.body.events.map(handleEvent))
         .then((result) => res.json(result))
