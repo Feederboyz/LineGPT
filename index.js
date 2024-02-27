@@ -23,6 +23,11 @@ app.post('/', (req, res) => {
     res.sendStatus(200);
 });
 
+app.post("/webhook", function (req, res) {
+    console.log("HTTP POST request sent to the webhook URL!");
+    res.send("HTTP POST request sent to the webhook URL!");
+});
+
 // register a webhook handler with middleware
 // about the middleware, please refer to doc
 app.post('/callback', line.middleware(config), (req, res) => {
