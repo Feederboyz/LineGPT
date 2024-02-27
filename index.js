@@ -19,7 +19,7 @@ const client = new line.messagingApi.MessagingApiClient({
 // about Express itself: https://expressjs.com/
 const app = express();
 
-app.get('/', (req, res) => {
+app.post('/', (req, res) => {
     res.sendStatus(200);
 });
 
