@@ -53,7 +53,7 @@ async function handleEvent(event) {
     });
 
     // create an echoing text message
-    const echo = { type: 'text', text: completion.choices[0] };
+    const echo = { type: 'text', text: completion.choices[0].message.content };
 
     // use reply API
     return client.replyMessage({
