@@ -45,7 +45,7 @@ async function handleEvent(event) {
         messages: [
             {
                 role: "system",
-                content: "You are a helpful assistant designed to output JSON. The format of the JSON only contain one element called 'whether'. And the value of whether must be string 'good' or 'bad'. ",
+                content: "You are a helpful assistant.",
             },
             { role: "user", content: event.message.text },
         ],
@@ -53,12 +53,12 @@ async function handleEvent(event) {
     });
 
     // create an echoing text message
-    const echo = { type: 'text', text: completion.choices[0].message.content };
+    const reply = { type: 'text', text: completion.choices[0].message.content };
 
     // use reply API
     return client.replyMessage({
         replyToken: event.replyToken,
-        messages: [echo],
+        messages: [reply],
     });
 }
 
