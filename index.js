@@ -19,15 +19,6 @@ const client = new line.messagingApi.MessagingApiClient({
 // about Express itself: https://expressjs.com/
 const app = express();
 
-app.post('/', (req, res) => {
-    res.sendStatus(200);
-});
-
-app.post("/webhook", function (req, res) {
-    console.log("HTTP POST request sent to the webhook URL!");
-    res.send("HTTP POST request sent to the webhook URL!");
-});
-
 // register a webhook handler with middleware
 // about the middleware, please refer to doc
 app.post('/callback', line.middleware(config), (req, res) => {
@@ -35,7 +26,7 @@ app.post('/callback', line.middleware(config), (req, res) => {
     console.log(`req.body: ${req.body}`);
     Promise
         .all(req.body.events.map(handleEvent))
-        .then((result) => res.json(result))
+        .then((result) => res.sendStatus(200))
         .catch((err) => {
             console.error(err);
             res.status(500).end();
