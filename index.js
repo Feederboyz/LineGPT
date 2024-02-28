@@ -1,7 +1,10 @@
 'use strict';
 
-const line = require('@line/bot-sdk');
-const express = require('express');
+import line from '@line/bot-sdk';
+import express from 'express';
+import OpenAI from "openai";
+
+const openai = new OpenAI();
 
 // create LINE SDK config from env variables
 const config = {
@@ -22,8 +25,6 @@ const app = express();
 // register a webhook handler with middleware
 // about the middleware, please refer to doc
 app.post('/callback', line.middleware(config), (req, res) => {
-    console.log(`A post request has arrived endpoint /callback`);
-    console.log(`req.body: ${req.body}`);
     Promise
         .all(req.body.events.map(handleEvent))
         .then((result) => res.sendStatus(200))
@@ -34,14 +35,25 @@ app.post('/callback', line.middleware(config), (req, res) => {
 });
 
 // event handler
-function handleEvent(event) {
+async function handleEvent(event) {
     if (event.type !== 'message' || event.message.type !== 'text') {
         // ignore non-text-message event
         return Promise.resolve(null);
     }
 
+    const completion = await openai.chat.completions.create({
+        messages: [
+            {
+                role: "system",
+                content: "You are a helpful assistant designed to output JSON. The format of the JSON only contain one element called 'whether'. And the value of whether must be string 'good' or 'bad'. ",
+            },
+            { role: "user", content: event.message.text },
+        ],
+        model: "gpt-3.5-turbo-0125",
+    });
+
     // create an echoing text message
-    const echo = { type: 'text', text: event.message.text };
+    const echo = { type: 'text', text: completion.choices[0] };
 
     // use reply API
     return client.replyMessage({
