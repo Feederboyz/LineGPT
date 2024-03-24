@@ -1,4 +1,5 @@
 ![logo](README/images/LineGPT.png)
+
 透過 API 將 Line 與 ChatGPT 串接，令使用者可透過 Line 聊天室來與 ChatGPT 進行文字對話。
 
 ## Background
